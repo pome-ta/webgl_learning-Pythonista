@@ -1,3 +1,9 @@
+/*
+  コンテキストの初期化
+  https://wgld.org/d/webgl/w007.html
+*/
+
+'use strict';
 onload = function(){
   // canvasエレメントを取得
   const c = document.getElementById('canvas');
