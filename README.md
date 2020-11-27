@@ -19,7 +19,7 @@ iOS アプリの[Pythonista3](http://omz-software.com/pythonista/) を使い
 Pythonista でないなら`html` からローカルで動くはず
 
 
-### `wkwebview`
+## `wkwebview`
 
 Pythonista の`ui` モジュールにある`ui.WebView` が、`UIWebView`
 
@@ -27,14 +27,14 @@ Pythonista の`ui` モジュールにある`ui.WebView` が、`UIWebView`
 `objc-util` より、`WKWebView` を呼び出せる[pythonista-webview](https://github.com/mikaelho/pythonista-webview) を使用
 
 
-### Eruda
+## Eruda
 
-スマートデバイス用Webブラウザー向け開発コンソール
+スマートデバイス用Webブラウザー向け開発コンソール(クッソ便利)
 
-[Eruda](https://eruda.liriliri.io/)
+- [Eruda](https://eruda.liriliri.io/)
 
 
-[Eruda Github](https://github.com/liriliri/eruda)
+- [Eruda Github](https://github.com/liriliri/eruda)
 
 
 cdn.jsdelivr から呼び出し
