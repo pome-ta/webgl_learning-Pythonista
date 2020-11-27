@@ -19,6 +19,16 @@ iOS アプリの[Pythonista3](http://omz-software.com/pythonista/) を使い
 Pythonista でないなら`html` からローカルで動くはず
 
 
+## ブランチの切り方
+
+`main` を現在の最新の項として、項毎にブランチを切ってる<br>使い方正しいかわらんけど
+
+
+(tag とかで普通管理するのかしら？)
+
+
+
+
 ## `wkwebview`
 
 Pythonista の`ui` モジュールにある`ui.WebView` が、`UIWebView`
@@ -38,3 +48,16 @@ Pythonista の`ui` モジュールにある`ui.WebView` が、`UIWebView`
 
 
 cdn.jsdelivr から呼び出し
+
+
+## JavaScript のコーデング
+
+なるべくES2015(ES6) で書くようにしてる
+
+
+`var` -> `let` or `const` とか
+
+
+Pythonista の`wkwebview` での動作確認しかしてないので、他ブラウザの挙動は不明
+
+
