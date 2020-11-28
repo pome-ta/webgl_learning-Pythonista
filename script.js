@@ -58,7 +58,6 @@ onload = () => {
   ];
 
   // VBOの生成
-  // VBOの生成
   const position_vbo = create_vbo(vertex_position);
   const color_vbo = create_vbo(vertex_color);
   
@@ -71,6 +70,8 @@ onload = () => {
   gl.bindBuffer(gl.ARRAY_BUFFER, color_vbo);
   gl.enableVertexAttribArray(attLocation[1]);
   gl.vertexAttribPointer(attLocation[1], attStride[1], gl.FLOAT, false, 0, 0);
+  
+  const uniLocation = gl.getUniformLocation(prg, 'mvpMatrix');
 
   // minMatrix.js を用いた行列関連処理
   // matIVオブジェクトを生成
@@ -80,29 +81,38 @@ onload = () => {
   const mMatrix = m.identity(m.create());
   const vMatrix = m.identity(m.create());
   const pMatrix = m.identity(m.create());
+  const tmpMatrix = m.identity(m.create());
   const mvpMatrix = m.identity(m.create());
 
-  // ビュー座標変換行列
-  m.lookAt([0.0, 1.0, 3.0], [0, 0, 0], [0, 1, 0], vMatrix);
-
-  // プロジェクション座標変換行列
+  // ビュー×プロジェクション座標変換行列
+  m.lookAt([0.0, 0.0, 3.0], [0, 0, 0], [0, 1, 0], vMatrix);
   m.perspective(90, c.width / c.height, 0.1, 100, pMatrix);
+  m.multiply(pMatrix, vMatrix, tmpMatrix);
 
-  // 各行列を掛け合わせ座標変換行列を完成させる
-  m.multiply(pMatrix, vMatrix, mvpMatrix);
-  m.multiply(mvpMatrix, mMatrix, mvpMatrix);
+  // 一つ目のモデルを移動するためのモデル座標変換行列
+  m.translate(mMatrix, [1.5, 0.0, 0.0], mMatrix);
 
-  // uniformLocationの取得
-  const uniLocation = gl.getUniformLocation(prg, 'mvpMatrix');
+  // モデル×ビュー×プロジェクション(一つ目のモデル)
+  m.multiply(tmpMatrix, mMatrix, mvpMatrix);
 
-  // uniformLocationへ座標変換行列を登録
+  // uniformLocationへ座標変換行列を登録し描画する(一つ目のモデル)
   gl.uniformMatrix4fv(uniLocation, false, mvpMatrix);
-
-  // モデルの描画
   gl.drawArrays(gl.TRIANGLES, 0, 3);
-
+  
+  // 二つ目のモデルを移動するためのモデル座標変換行列
+  m.identity(mMatrix);
+  m.translate(mMatrix, [-1.5, 0.0, 0.0], mMatrix);
+  
+  // モデル×ビュー×プロジェクション(二つ目のモデル)
+  m.multiply(tmpMatrix, mMatrix, mvpMatrix);
+  
+  // uniformLocationへ座標変換行列を登録し描画する(二つ目のモデル)
+  gl.uniformMatrix4fv(uniLocation, false, mvpMatrix);
+  gl.drawArrays(gl.TRIANGLES, 0, 3);
+  
   // コンテキストの再描画
   gl.flush();
+
 
   // シェーダを生成する関数
   function create_shader(id){
