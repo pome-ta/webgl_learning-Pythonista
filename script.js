@@ -1,6 +1,6 @@
 /*
-   ポリゴンに色を塗る(頂点色の指定)
-   https://wgld.org/d/webgl/w015.html
+   複数モデルのレンダリング
+   https://wgld.org/d/webgl/w016.html
  */
 
 'use strict';
