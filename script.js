@@ -42,35 +42,28 @@ onload = () => {
   const attStride = new Array(2);
   attStride[0] = 3;
   attStride[1] = 4;
-  
-  // 頂点の位置情報を格納する配列
-  const vertex_position = [
+
+  // 頂点属性を格納する配列
+  const position = [
     0.0, 1.0, 0.0,
     1.0, 0.0, 0.0,
     -1.0, 0.0, 0.0
   ];
-  
-  // 頂点の色情報を格納する配列
-  const vertex_color = [
+  const color = [
     1.0, 0.0, 0.0, 1.0,
     0.0, 1.0, 0.0, 1.0,
     0.0, 0.0, 1.0, 1.0
   ];
 
   // VBOの生成
-  // VBOの生成
-  const position_vbo = create_vbo(vertex_position);
-  const color_vbo = create_vbo(vertex_color);
-  
-  // VBOをバインドし登録する(位置情報)
-  gl.bindBuffer(gl.ARRAY_BUFFER, position_vbo);
-  gl.enableVertexAttribArray(attLocation[0]);
-  gl.vertexAttribPointer(attLocation[0], attStride[0], gl.FLOAT, false, 0, 0);
-  
-  // VBOをバインドし登録する(色情報)
-  gl.bindBuffer(gl.ARRAY_BUFFER, color_vbo);
-  gl.enableVertexAttribArray(attLocation[1]);
-  gl.vertexAttribPointer(attLocation[1], attStride[1], gl.FLOAT, false, 0, 0);
+  const pos_vbo = create_vbo(position);
+  const col_vbo = create_vbo(color);
+
+  // VBO を登録する
+  set_attribute([pos_vbo, col_vbo], attLocation, attStride);
+
+  // uniformLocationの取得
+  const uniLocation = gl.getUniformLocation(prg, 'mvpMatrix');
 
   // minMatrix.js を用いた行列関連処理
   // matIVオブジェクトを生成
@@ -80,25 +73,33 @@ onload = () => {
   const mMatrix = m.identity(m.create());
   const vMatrix = m.identity(m.create());
   const pMatrix = m.identity(m.create());
+  const tmpMatrix = m.identity(m.create());
   const mvpMatrix = m.identity(m.create());
 
-  // ビュー座標変換行列
-  m.lookAt([0.0, 1.0, 3.0], [0, 0, 0], [0, 1, 0], vMatrix);
-
-  // プロジェクション座標変換行列
+  // ビュー×プロジェクション座標変換行列
+  m.lookAt([0.0, 0.0, 3.0], [0, 0, 0], [0, 1, 0], vMatrix);
   m.perspective(90, c.width / c.height, 0.1, 100, pMatrix);
+  m.multiply(pMatrix, vMatrix, tmpMatrix);
 
-  // 各行列を掛け合わせ座標変換行列を完成させる
-  m.multiply(pMatrix, vMatrix, mvpMatrix);
-  m.multiply(mvpMatrix, mMatrix, mvpMatrix);
+  // 一つ目のモデルを移動するためのモデル座標変換行列
+  m.translate(mMatrix, [1.5, 0.0, 0.0], mMatrix);
 
-  // uniformLocationの取得
-  const uniLocation = gl.getUniformLocation(prg, 'mvpMatrix');
+  // モデル×ビュー×プロジェクション(一つ目のモデル)
+  m.multiply(tmpMatrix, mMatrix, mvpMatrix);
 
-  // uniformLocationへ座標変換行列を登録
+  // uniformLocationへ座標変換行列を登録し描画する(一つ目のモデル)
   gl.uniformMatrix4fv(uniLocation, false, mvpMatrix);
+  gl.drawArrays(gl.TRIANGLES, 0, 3);
 
-  // モデルの描画
+  // 二つ目のモデルを移動するためのモデル座標変換行列
+  m.identity(mMatrix);
+  m.translate(mMatrix, [-1.5, 0.0, 0.0], mMatrix);
+
+  // モデル×ビュー×プロジェクション(二つ目のモデル)
+  m.multiply(tmpMatrix, mMatrix, mvpMatrix);
+
+  // uniformLocationへ座標変換行列を登録し描画する(二つ目のモデル)
+  gl.uniformMatrix4fv(uniLocation, false, mvpMatrix);
   gl.drawArrays(gl.TRIANGLES, 0, 3);
 
   // コンテキストの再描画
@@ -106,7 +107,6 @@ onload = () => {
 
   // シェーダを生成する関数
   function create_shader(id){
-  //const create_shader = id => { -> error
     // シェーダを格納する変数
     let shader;
 
@@ -118,10 +118,12 @@ onload = () => {
 
     // scriptタグのtype属性をチェック
     switch(scriptElement.type){
+
       // 頂点シェーダの場合
       case 'x-shader/x-vertex':
         shader = gl.createShader(gl.VERTEX_SHADER);
         break;
+
         // フラグメントシェーダの場合
       case 'x-shader/x-fragment':
         shader = gl.createShader(gl.FRAGMENT_SHADER);
@@ -129,6 +131,7 @@ onload = () => {
       default :
         return;
     }
+
     // 生成されたシェーダにソースを割り当てる
     gl.shaderSource(shader, scriptElement.text);
 
@@ -137,9 +140,11 @@ onload = () => {
 
     // シェーダが正しくコンパイルされたかチェック
     if(gl.getShaderParameter(shader, gl.COMPILE_STATUS)){
+
       // 成功していたらシェーダを返して終了
       return shader;
-    } else {
+    }else{
+
       // 失敗していたらエラーログをアラートする
       alert(gl.getShaderInfoLog(shader));
     }
@@ -165,7 +170,7 @@ onload = () => {
 
       // プログラムオブジェクトを返して終了
       return program;
-    } else {
+    }else{
 
       // 失敗していたらエラーログをアラートする
       alert(gl.getProgramInfoLog(program));
@@ -188,6 +193,21 @@ onload = () => {
 
     // 生成した VBO を返して終了
     return vbo;
+  }
+
+  // VBOをバインドし登録する関数
+  function set_attribute(vbo, attL, attS){
+    // 引数として受け取った配列を処理する
+    for(const i in vbo){
+      // バッファをバインドする
+      gl.bindBuffer(gl.ARRAY_BUFFER, vbo[i]);
+
+      // attributeLocationを有効にする
+      gl.enableVertexAttribArray(attL[i]);
+
+      // attributeLocationを通知し登録する
+      gl.vertexAttribPointer(attL[i], attS[i], gl.FLOAT, false, 0, 0);
+    }
   }
 
 };
