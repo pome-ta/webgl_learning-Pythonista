@@ -29,6 +29,36 @@ Pythonista でないなら`html` からローカルで動くはず
 
 
 
+## JavaScript のコーデング
+
+なるべくES2015(ES6) で書くようにしてる
+
+
+`var` -> `let` or `const` とか
+
+
+Pythonista の`wkwebview` での動作確認しかしてないので、他ブラウザの挙動は不明
+
+
+### `minMatrix.js`
+
+[行列演算とライブラリ](https://wgld.org/d/webgl/w010.html) の項のライブラリを一部 ES2015(6) に書き換え
+
+
+`minMatrixES6` としている
+
+
+- `export default`
+- `var` -> `const` or `let`
+
+程度の書き換え
+
+
+> wgld.org オリジナル行列演算ライブラリ
+> [minMatrix.js](https://wgld.org/j/minMatrix.js)
+
+
+
 ## `wkwebview`
 
 Pythonista の`ui` モジュールにある`ui.WebView` が、`UIWebView`
@@ -49,15 +79,5 @@ Pythonista の`ui` モジュールにある`ui.WebView` が、`UIWebView`
 
 cdn.jsdelivr から呼び出し
 
-
-## JavaScript のコーデング
-
-なるべくES2015(ES6) で書くようにしてる
-
-
-`var` -> `let` or `const` とか
-
-
-Pythonista の`wkwebview` での動作確認しかしてないので、他ブラウザの挙動は不明
 
 
