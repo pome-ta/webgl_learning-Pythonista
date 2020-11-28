@@ -58,7 +58,6 @@ onload = () => {
   ];
 
   // VBOの生成
-  // VBOの生成
   const position_vbo = create_vbo(vertex_position);
   const color_vbo = create_vbo(vertex_color);
   
