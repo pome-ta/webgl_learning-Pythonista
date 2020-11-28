@@ -40,12 +40,12 @@ Pythonista でないなら`html` からローカルで動くはず
 Pythonista の`wkwebview` での動作確認しかしてないので、他ブラウザの挙動は不明
 
 
-### `minMatrix.js`
+### `minMatrixES.js`
 
 [行列演算とライブラリ](https://wgld.org/d/webgl/w010.html) の項のライブラリを一部 ES2015(6) に書き換え
 
 
-`minMatrixES6` としている
+`minMatrix.js` -> `minMatrixES6.js` としている
 
 
 - `export default`
