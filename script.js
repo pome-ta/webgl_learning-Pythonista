@@ -1,11 +1,14 @@
-
 /*
    ポリゴンのレンダリング ver: es6
    https://wgld.org/d/webgl/w014.html
  */
 
+'use strict';
 
-onload = function(){
+import matIV from "./minMatrixES6.js";
+
+
+onload = () => {
   // canvasエレメントを取得
   const c = document.getElementById('canvas');
   c.width = 300;
@@ -59,7 +62,6 @@ onload = function(){
   // matIVオブジェクトを生成
   const m = new matIV();
 
-
   // 各種行列の生成と初期化
   const mMatrix = m.identity(m.create());
   const vMatrix = m.identity(m.create());
@@ -90,6 +92,7 @@ onload = function(){
 
   // シェーダを生成する関数
   function create_shader(id){
+  //const create_shader = id => { -> error
     // シェーダを格納する変数
     let shader;
 
@@ -148,7 +151,7 @@ onload = function(){
 
       // プログラムオブジェクトを返して終了
       return program;
-    }else{
+    } else {
 
       // 失敗していたらエラーログをアラートする
       alert(gl.getProgramInfoLog(program));

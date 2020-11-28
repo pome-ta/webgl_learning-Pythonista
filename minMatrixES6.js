@@ -4,9 +4,11 @@
 // Copyright (c) doxas
 // ------------------------------------------------------------------------------------------------
 
-// add : pome-ta 2020/11/27
+// add : 2020/11/27 @pome-ta
+'use strict';
 
-function matIV(){
+
+export default function matIV(){
   this.create = function(){
     return new Float32Array(16);
   };
