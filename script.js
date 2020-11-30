@@ -5,7 +5,7 @@
 
 'use strict';
 
-import matIV from "./minMatrixES6.js";
+import matIV from "./modules/minMatrixES6.js";
 
 
 onload = () => {
