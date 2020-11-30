@@ -16,7 +16,7 @@ iOS アプリの[Pythonista3](http://omz-software.com/pythonista/) を使い
 1) Pythonista で`run.py` を実行
 
 
-Pythonista でないなら`html` からローカルで動くはず
+Pythonista でないなら`html` から~~ローカルで動くはず~~ localServer 立ち上げるです😇
 
 
 ## ブランチの切り方
