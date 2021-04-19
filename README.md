@@ -18,6 +18,15 @@ iOS アプリの[Pythonista3](http://omz-software.com/pythonista/) を使い
 
 Pythonista 以外であれば`html` から~~ローカルで動くはず~~ localServer 立ち上げるです😇
 
+#### Pythonista 以外(PC)
+
+
+```
+$ python -m http.server 8000
+```
+
+[http://localhost:8000](http://localhost:8000)
+
 
 ## ブランチの切り方
 
