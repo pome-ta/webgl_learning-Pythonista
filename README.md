@@ -20,12 +20,16 @@ Pythonista でないなら`html` から~~ローカルで動くはず~~ localServ
 
 #### Pythonista 以外(PC)
 
+Terminalで、
 
 ```
 $ python -m http.server 8000
 ```
 
 [http://localhost:8000](http://localhost:8000)
+
+
+終了は、`Ctrl + c`
 
 
 ## ブランチの切り方
