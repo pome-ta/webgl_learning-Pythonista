@@ -8,18 +8,18 @@
 'use strict';
 
 
-export default function matIV(){
-  this.create = function(){
+export default function matIV() {
+  this.create = function() {
     return new Float32Array(16);
   };
-  this.identity = function(dest){
+  this.identity = function(dest) {
     dest[0]  = 1; dest[1]  = 0; dest[2]  = 0; dest[3]  = 0;
     dest[4]  = 0; dest[5]  = 1; dest[6]  = 0; dest[7]  = 0;
     dest[8]  = 0; dest[9]  = 0; dest[10] = 1; dest[11] = 0;
     dest[12] = 0; dest[13] = 0; dest[14] = 0; dest[15] = 1;
     return dest;
   };
-  this.multiply = function(mat1, mat2, dest){
+  this.multiply = function(mat1, mat2, dest) {
     const a = mat1[0],  b = mat1[1],  c = mat1[2],  d = mat1[3],
     e = mat1[4],  f = mat1[5],  g = mat1[6],  h = mat1[7],
     i = mat1[8],  j = mat1[9],  k = mat1[10], l = mat1[11],
@@ -46,7 +46,7 @@ export default function matIV(){
     dest[15] = M * d + N * h + O * l + P * p;
     return dest;
   };
-  this.scale = function(mat, vec, dest){
+  this.scale = function(mat, vec, dest) {
     dest[0]  = mat[0]  * vec[0];
     dest[1]  = mat[1]  * vec[0];
     dest[2]  = mat[2]  * vec[0];
@@ -65,7 +65,7 @@ export default function matIV(){
     dest[15] = mat[15];
     return dest;
   };
-  this.translate = function(mat, vec, dest){
+  this.translate = function(mat, vec, dest) {
     dest[0] = mat[0]; dest[1] = mat[1]; dest[2]  = mat[2];  dest[3]  = mat[3];
     dest[4] = mat[4]; dest[5] = mat[5]; dest[6]  = mat[6];  dest[7]  = mat[7];
     dest[8] = mat[8]; dest[9] = mat[9]; dest[10] = mat[10]; dest[11] = mat[11];
@@ -75,11 +75,11 @@ export default function matIV(){
     dest[15] = mat[3] * vec[0] + mat[7] * vec[1] + mat[11] * vec[2] + mat[15];
     return dest;
   };
-  this.rotate = function(mat, angle, axis, dest){
+  this.rotate = function(mat, angle, axis, dest) {
     const sq = Math.sqrt(axis[0] * axis[0] + axis[1] * axis[1] + axis[2] * axis[2]);
-    if(!sq){return null;}
+    if (!sq) { return null; }
     const a = axis[0], b = axis[1], c = axis[2];
-    if(sq != 1){sq = 1 / sq; a *= sq; b *= sq; c *= sq;}
+    if (sq != 1) { sq = 1 / sq; a *= sq; b *= sq; c *= sq; }
     const d = Math.sin(angle), e = Math.cos(angle), f = 1 - e,
         g = mat[0],  h = mat[1], i = mat[2],  j = mat[3],
         k = mat[4],  l = mat[5], m = mat[6],  n = mat[7],
@@ -93,8 +93,8 @@ export default function matIV(){
         y = a * c * f + b * d,
         z = b * c * f - a * d,
         A = c * c * f + e;
-        if(angle){
-          if(mat != dest){
+        if (angle) {
+          if (mat != dest) {
             dest[12] = mat[12]; dest[13] = mat[13];
             dest[14] = mat[14]; dest[15] = mat[15];
           }
@@ -115,11 +115,11 @@ export default function matIV(){
         dest[11] = j * y + n * z + r * A;
         return dest;
   };
-  this.lookAt = function(eye, center, up, dest){
+  this.lookAt = function(eye, center, up, dest) {
     const eyeX    = eye[0],    eyeY    = eye[1],    eyeZ    = eye[2],
     upX     = up[0],     upY     = up[1],     upZ     = up[2],
     centerX = center[0], centerY = center[1], centerZ = center[2];
-    if(eyeX == centerX && eyeY == centerY && eyeZ == centerZ){return this.identity(dest);}
+    if (eyeX == centerX && eyeY == centerY && eyeZ == centerZ) { return this.identity(dest); }
     let x0, x1, x2, y0, y1, y2, z0, z1, z2, l;
     z0 = eyeX - center[0]; z1 = eyeY - center[1]; z2 = eyeZ - center[2];
     l = 1 / Math.sqrt(z0 * z0 + z1 * z1 + z2 * z2);
@@ -128,7 +128,7 @@ export default function matIV(){
     x1 = upZ * z0 - upX * z2;
     x2 = upX * z1 - upY * z0;
     l = Math.sqrt(x0 * x0 + x1 * x1 + x2 * x2);
-    if(!l){
+    if (!l) {
       x0 = 0; x1 = 0; x2 = 0;
     } else {
       l = 1 / l;
@@ -136,7 +136,7 @@ export default function matIV(){
     }
     y0 = z1 * x2 - z2 * x1; y1 = z2 * x0 - z0 * x2; y2 = z0 * x1 - z1 * x0;
     l = Math.sqrt(y0 * y0 + y1 * y1 + y2 * y2);
-    if(!l){
+    if (!l) {
       y0 = 0; y1 = 0; y2 = 0;
     } else {
       l = 1 / l;
@@ -151,7 +151,7 @@ export default function matIV(){
     dest[15] = 1;
     return dest;
   };
-  this.perspective = function(fovy, aspect, near, far, dest){
+  this.perspective = function(fovy, aspect, near, far, dest) {
     const t = near * Math.tan(fovy * Math.PI / 360);
     const r = t * aspect;
     const a = r * 2, b = t * 2, c = far - near;
@@ -173,7 +173,7 @@ export default function matIV(){
     dest[15] = 0;
     return dest;
   };
-  this.transpose = function(mat, dest){
+  this.transpose = function(mat, dest) {
     dest[0]  = mat[0];  dest[1]  = mat[4];
     dest[2]  = mat[8];  dest[3]  = mat[12];
     dest[4]  = mat[1];  dest[5]  = mat[5];
@@ -184,7 +184,7 @@ export default function matIV(){
     dest[14] = mat[11]; dest[15] = mat[15];
     return dest;
   };
-  this.inverse = function(mat, dest){
+  this.inverse = function(mat, dest) {
     const a = mat[0],  b = mat[1],  c = mat[2],  d = mat[3],
     e = mat[4],  f = mat[5],  g = mat[6],  h = mat[7],
     i = mat[8],  j = mat[9],  k = mat[10], l = mat[11],

@@ -106,7 +106,7 @@ onload = () => {
   gl.flush();
 
   // シェーダを生成する関数
-  function create_shader(id){
+  function create_shader(id) {
     // シェーダを格納する変数
     let shader;
 
@@ -114,11 +114,10 @@ onload = () => {
     const scriptElement = document.getElementById(id);
 
     // scriptタグが存在しない場合は抜ける
-    if(!scriptElement){return;}
+    if (!scriptElement) { return; }
 
     // scriptタグのtype属性をチェック
-    switch(scriptElement.type){
-
+    switch (scriptElement.type) {
       // 頂点シェーダの場合
       case 'x-shader/x-vertex':
         shader = gl.createShader(gl.VERTEX_SHADER);
@@ -139,11 +138,10 @@ onload = () => {
     gl.compileShader(shader);
 
     // シェーダが正しくコンパイルされたかチェック
-    if(gl.getShaderParameter(shader, gl.COMPILE_STATUS)){
-
+    if(gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
       // 成功していたらシェーダを返して終了
       return shader;
-    }else{
+    } else {
 
       // 失敗していたらエラーログをアラートする
       alert(gl.getShaderInfoLog(shader));
@@ -151,7 +149,7 @@ onload = () => {
   }
 
   // プログラムオブジェクトを生成しシェーダをリンクする関数
-  function create_program(vs, fs){
+  function create_program(vs, fs) {
     // プログラムオブジェクトの生成
     const program = gl.createProgram();
 
@@ -163,22 +161,20 @@ onload = () => {
     gl.linkProgram(program);
 
     // シェーダのリンクが正しく行なわれたかチェック
-    if(gl.getProgramParameter(program, gl.LINK_STATUS)){
-
+    if (gl.getProgramParameter(program, gl.LINK_STATUS)) {
       // 成功していたらプログラムオブジェクトを有効にする
       gl.useProgram(program);
 
       // プログラムオブジェクトを返して終了
       return program;
-    }else{
-
+    } else {
       // 失敗していたらエラーログをアラートする
       alert(gl.getProgramInfoLog(program));
     }
   }
 
   // VBOを生成する関数
-  function create_vbo(data){
+  function create_vbo(data) {
     // バッファオブジェクトの生成
     const vbo = gl.createBuffer();
 
@@ -196,9 +192,9 @@ onload = () => {
   }
 
   // VBOをバインドし登録する関数
-  function set_attribute(vbo, attL, attS){
+  function set_attribute(vbo, attL, attS) {
     // 引数として受け取った配列を処理する
-    for(const i in vbo){
+    for (const i in vbo) {
       // バッファをバインドする
       gl.bindBuffer(gl.ARRAY_BUFFER, vbo[i]);
 
@@ -209,6 +205,5 @@ onload = () => {
       gl.vertexAttribPointer(attL[i], attS[i], gl.FLOAT, false, 0, 0);
     }
   }
-
 };
 
